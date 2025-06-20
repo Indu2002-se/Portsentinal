@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Network Scan Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive-navbar.css') }}">
     <style>
         :root {
             --primary-bg: linear-gradient(135deg, #0f0f23 0%, #1a1b3a 25%, #2d1b69 50%, #1a1b3a 75%, #0f0f23 100%);
@@ -1031,14 +1032,20 @@
 <body>
     <!-- Navigation Bar -->
     <div class="nav-container">
+        <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Toggle menu" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
         <a href="{{ url_for('index') }}" class="logo">PortSentinel</a>
-        <div class="nav-center">
-            <a href="{{ url_for('scanner_page') }}" class="nav-link">Scanner</a>
-            <a href="{{ url_for('dashboard') }}" class="nav-link active">Dashboard</a>
-            <a href="{{ url_for('export_history') }}" class="nav-link">Export History</a>
+        <div class="nav-links-container">
+            <div class="nav-center">
+                <a href="{{ url_for('scanner_page') }}" class="nav-link">Scanner</a>
+                <a href="{{ url_for('dashboard') }}" class="nav-link active">Dashboard</a>
+                <a href="{{ url_for('export_history') }}" class="nav-link">Export History</a>
+            </div>
         </div>
         <div class="nav-right-container">
-          
             <div class="user-info">
                 <span class="username">{{ session.get('username', 'User') }}</span>
                 <a href="{{ url_for('auth.logout') }}" class="logout-btn">Logout</a>
@@ -1698,5 +1705,6 @@
             });
         }
     </script>
+    <script src="{{ url_for('static', filename='js/responsive-navbar.js') }}"></script>
 </body>
 </html>

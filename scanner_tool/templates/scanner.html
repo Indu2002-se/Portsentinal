@@ -6,6 +6,7 @@
     <title>Port Scanner - PortSentinel</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='landing.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive-navbar.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -29,13 +30,17 @@
         <div class="port-indicator port-443"></div>
     </div>
 
-    <!-- Glassy Navbar -->
+    <!-- Responsive Glassy Navbar -->
     <nav class="glassy-nav">
         <div class="nav-content">
+            <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Toggle menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
             <div class="logo">PortSentinel</div>
             <div class="nav-links-container">
                 <div class="nav-links">
-                   
                     <a href="{{ url_for('scanner_page') }}" class="active">Scanner</a>
                     <a href="{{ url_for('dashboard') }}">Dashboard</a>
                     <a href="{{ url_for('export_history') }}">Export History</a>
@@ -226,6 +231,7 @@
     <div id="toast-container"></div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/responsive-navbar.js') }}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // Theme Switcher

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Feedback Management</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='landing.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive-navbar.css') }}">
     <style>
         .admin-container {
             max-width: 1200px;
@@ -144,6 +145,11 @@
     
     <nav class="glassy-nav">
         <div class="nav-content">
+            <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Toggle menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
             <div class="logo">PortSentinel</div>
             <div class="nav-links-container">
                 <div class="nav-links">
@@ -294,5 +300,6 @@
             }
         }
     </script>
+    <script src="{{ url_for('static', filename='js/responsive-navbar.js') }}"></script>
 </body>
 </html> 
