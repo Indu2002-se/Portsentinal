@@ -27,9 +27,14 @@ def signup():
         username = request.form.get('username')
         email = request.form.get('email')
         password = request.form.get('password')
+        privacy_agree = request.form.get('privacy_agree')
         
         if not username or not email or not password:
             flash('All fields are required', 'error')
+            return redirect(url_for('auth.signup'))
+            
+        if not privacy_agree:
+            flash('You must agree to the Privacy Policy', 'error')
             return redirect(url_for('auth.signup'))
             
         try:
@@ -93,6 +98,10 @@ def login():
             
     return render_template('auth/login.html')
 
+@auth.route('/privacy-policy')
+def privacy_policy():
+    return render_template('auth/privacy_policy.html')
+    
 @auth.route('/logout')
 def logout():
     session.clear()

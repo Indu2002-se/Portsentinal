@@ -977,6 +977,33 @@
         font-size: 0.9rem;
     }
     
+    .footer-link {
+        color: var(--highlight-color);
+        text-decoration: none;
+        margin-left: 10px;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+    
+    .footer-link:hover {
+        text-shadow: 0 0 5px var(--highlight-color);
+    }
+    
+    .footer-link::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 1px;
+        bottom: -2px;
+        left: 0;
+        background-color: var(--highlight-color);
+        transition: width 0.3s ease;
+    }
+    
+    .footer-link:hover::after {
+        width: 100%;
+    }
+    
     /* Responsive Design */
     @media (max-width: 768px) {
         .input-group {

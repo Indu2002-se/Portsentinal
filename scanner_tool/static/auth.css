@@ -252,7 +252,6 @@ body {
     position: absolute;
     top: 20px;
     right: 20px;
-    z-index: 10;
 }
 
 .theme-select {
@@ -294,4 +293,54 @@ body {
 
 .background-animation {
     position: absolute;
+}
+
+/* Privacy Policy Checkbox */
+.privacy-checkbox {
+    display: flex;
+    align-items: center;
+    margin: 15px 0;
+}
+
+.privacy-checkbox input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    background: rgba(17, 25, 40, 0.7);
+    border: 1px solid rgba(103, 126, 234, 0.3);
+    border-radius: 4px;
+    margin-right: 10px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.privacy-checkbox input[type="checkbox"]:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.privacy-checkbox input[type="checkbox"]:checked::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 14px;
+}
+
+.privacy-checkbox input[type="checkbox"]:focus {
+    box-shadow: 0 0 5px rgba(103, 126, 234, 0.5);
+    outline: none;
+}
+
+.privacy-checkbox label {
+    margin-bottom: 0;
+    cursor: pointer;
+}
+
+.privacy-checkbox .cyber-link {
+    text-decoration: underline;
 } 
