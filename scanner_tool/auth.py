@@ -1,9 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
-from werkzeug.security import generate_password_hash, check_password_hash
 from supabase import create_client, Client
 import os
 from functools import wraps
-import re
 
 auth = Blueprint('auth', __name__)
 
@@ -28,45 +26,42 @@ def signup():
         email = request.form.get('email')
         password = request.form.get('password')
         privacy_agree = request.form.get('privacy_agree')
-        
-        if not username or not email or not password:
+
+        if not all([username, email, password]):
             flash('All fields are required', 'error')
             return redirect(url_for('auth.signup'))
-            
+        
         if not privacy_agree:
             flash('You must agree to the Privacy Policy', 'error')
             return redirect(url_for('auth.signup'))
-            
+
         try:
-            # Check if username already exists
+            # Check if username already exists in the old system for backward compatibility
             res = supabase.table('users').select("id").eq('username', username).execute()
             if res.data:
                 flash('Username already exists', 'error')
                 return redirect(url_for('auth.signup'))
 
-            # Check if email already exists
-            res = supabase.table('users').select("id").eq('email', email).execute()
-            if res.data:
-                flash('Email already exists', 'error')
-                return redirect(url_for('auth.signup'))
-
-            hashed_password = generate_password_hash(password)
-            
-            user = supabase.table('users').insert({
-                "username": username,
+            # Sign up the user with Supabase Auth
+            auth_response = supabase.auth.sign_up({
                 "email": email,
-                "password": hashed_password
-            }).execute()
+                "password": password,
+                "options": {
+                    "data": {
+                        "username": username
+                    },
+                    "email_redirect_to": url_for('auth.login', _external=True)
+                }
+            })
 
-            if user.data:
-                flash('Registration successful! Please log in.', 'success')
-                return redirect(url_for('auth.login'))
-            else:
-                flash('An error occurred during registration. Please try again.', 'error')
-                return redirect(url_for('auth.signup'))
+            # The user is signed up but needs to confirm their email
+            # Supabase sends the confirmation email automatically
+            flash('Registration successful! Please check your email to confirm your account.', 'success')
+            return redirect(url_for('auth.login'))
 
         except Exception as e:
-            flash(f'An error occurred during registration: {e}', 'error')
+            # Supabase client raises an error for existing email, so we can catch it
+            flash(f'An error occurred: {e}', 'error')
             return redirect(url_for('auth.signup'))
             
     return render_template('auth/signup.html')
@@ -74,27 +69,23 @@ def signup():
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form.get('username')
+        email = request.form.get('email')
         password = request.form.get('password')
         
-        if not username or not password:
+        if not email or not password:
             flash('Please fill in all fields', 'error')
             return redirect(url_for('auth.login'))
             
         try:
-            res = supabase.table('users').select("*").eq('username', username).execute()
-            if res.data:
-                user = res.data[0]
-                if check_password_hash(user['password'], password):
-                    session['user_id'] = user['id']
-                    session['username'] = user['username']
-                    flash('Welcome back!', 'success')
-                    return redirect(url_for('dashboard'))
-                    
-            flash('Invalid username or password', 'error')
-            
+            data = supabase.auth.sign_in_with_password({"email": email, "password": password})
+            session['user_id'] = data.user.id
+            session['username'] = data.user.user_metadata.get('username', 'N/A')
+            flash('Welcome back!', 'success')
+            return redirect(url_for('dashboard'))
+        
         except Exception as e:
-            flash(f'An error occurred during login: {e}', 'error')
+            flash('Invalid email or password, or email not confirmed.', 'error')
+            return redirect(url_for('auth.login'))
             
     return render_template('auth/login.html')
 
