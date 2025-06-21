@@ -22,14 +22,14 @@
 }
 
 body.light-theme {
-    --primary-bg: #f5f7fa;
-    --secondary-bg: #ffffff;
-    --card-bg: #ffffff;
+    --primary-bg: #faf5f5be;
+    --secondary-bg: #faf5f5be;
+    --card-bg: #faf5f5be;
     --glass-bg: rgba(255, 255, 255, 0.7);
     --primary-color: #3d5afe;
     --secondary-color: #00bcd4;
-    --text-primary: #212529;
-    --text-secondary: #6c757d;
+    --text-primary: #000000;
+    --text-secondary: #000000;
     --border-color: rgba(0, 0, 0, 0.1);
     --gradient-primary: linear-gradient(135deg, #3d5afe 0%, #00bcd4 100%);
 }
