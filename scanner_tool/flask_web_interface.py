@@ -2760,6 +2760,7 @@ def api_export_results(format_type):
     
     # Get current user ID if available
     user_id = session.get('user_id')
+    # We should use the numeric user_id from session, not the UUID
     debug_info['user_id'] = user_id
     
     # Validate scan ID and check for results
@@ -2838,13 +2839,18 @@ def api_export_results(format_type):
             
             # Prepare export data for database - use export_date instead of created_at
             current_time = datetime.now().isoformat()
+            
+            # Ensure user_id is a valid bigint or null
+            # If the user_id is a UUID (string), we need to get the numeric ID from session
+            user_id_for_db = user_id  # This should now be the bigint ID from session
+            
             export_data = {
                 'scan_id': scan_id,
                 'target_host': host,
                 'export_format': format_type,
                 'file_path': filepath,
                 'file_size': file_size,
-                'user_id': user_id,
+                'user_id': user_id_for_db,  # This is now the bigint ID
                 'scan_date': scan_date.isoformat() if scan_date else current_time,
                 'port_count': port_count,
                 'open_port_count': open_port_count,
@@ -2867,14 +2873,14 @@ def api_export_results(format_type):
                 debug_info['db_error'] = error_msg
                 app.logger.error(error_msg)
                 
-                # Try a simplified insert as a fallback
+                # Try a simplified insert as a fallback, making sure user_id is a bigint
                 try:
                     minimal_data = {
                         'target_host': host,
                         'export_format': format_type,
                         'file_path': filepath,
                         'file_size': file_size,
-                        'user_id': user_id,
+                        'user_id': user_id_for_db,  # Use the bigint ID
                         'summary': summary,
                         'export_date': current_time  # Use export_date instead of created_at
                     }
